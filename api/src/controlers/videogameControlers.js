@@ -78,22 +78,6 @@ const getVideoGameById = async (req, res) => {
       genres
     } = response
 
-    const platforms = parent_platforms.map((p) => {
-      return { name: p.platform.name, id: p.platform.id }
-    })
-
-    const newStores = stores.map((s) => {
-      return { name: s.store.name, id: s.store.id }
-    })
-
-    const newTags = tags.map((t) => {
-      return { name: t.name, id: t.id }
-    })
-
-    const newGenres = genres.map((g) => {
-      return { name: g.name, id: g.id }
-    })
-
     res.json({
       id,
       name,
@@ -104,10 +88,18 @@ const getVideoGameById = async (req, res) => {
       background_image_additional,
       website,
       rating,
-      platforms,
-      newStores,
-      newTags,
-      newGenres
+      platforms: parent_platforms.map((p) => {
+        return { name: p.platform.name, id: p.platform.id }
+      }),
+      stores: stores.map((s) => {
+        return { name: s.store.name, id: s.store.id }
+      }),
+      tags: tags.map((t) => {
+        return { name: t.name, id: t.id }
+      }),
+      genres:  genres.map((g) => {
+        return { name: g.name, id: g.id }
+      })
     })
   } catch (err) {
     console.log(err)
