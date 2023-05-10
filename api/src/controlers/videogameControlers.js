@@ -3,6 +3,7 @@ import {
   fetchVideoGameByParams
 } from '../services/fetchRawg.js'
 import Genre from '../db/models/Genre.js'
+import { isUUID } from '../utils/validacion.js'
 import Videogame from '../db/models/Videogame.js'
 
 const getVideoGame = async (req, res) => {
@@ -40,62 +41,82 @@ const getVideoGame = async (req, res) => {
       }
     })
     const storeVideogames = await Videogame.findAll()
-    res.status(200).json([...storeVideogames, ...newresult])
+    return res.status(200).json([...storeVideogames, ...newresult])
   } catch (err) {
-    res.status(500).json({ error: err })
+    return res.status(500).json({ error: err })
   }
 }
 
 const getVideoGameById = async (req, res) => {
   try {
     const { idVideogame } = req.params
-    const temporal = Videogame.findByPk(idVideogame)
-    if (temporal !== null) {
-      console.log(temporal)
-      return res.status(200).json(temporal)
-    }
-    const response = await fetchVideoGame(`games/${idVideogame}`)
-    const {
-      id,
-      name,
-      description,
-      released,
-      updated,
-      background_image,
-      background_image_additional,
-      website,
-      rating,
-      parent_platforms,
-      stores,
-      tags,
-      genres
-    } = response
+    console.log(typeof idVideogame)
+    if (idVideogame.length < 6) {
+      console.log('llegue aqui')
+      const response = await fetchVideoGame(`games/${idVideogame}`)
+      const { detail } = response
+      if (detail) {
+        return res
+          .status(200)
+          .json({ message: 'no se encontro el resultado en rawGames' })
+      } else {
+        const {
+          id,
+          name,
+          description,
+          released,
+          updated,
+          background_image,
+          background_image_additional,
+          website,
+          rating,
+          parent_platforms,
+          stores,
+          tags,
+          genres
+        } = response
 
-    res.json({
-      id,
-      name,
-      description,
-      released,
-      updated,
-      background_image,
-      background_image_additional,
-      website,
-      rating,
-      platforms: parent_platforms.map((p) => {
-        return { name: p.platform.name, id: p.platform.id }
-      }),
-      stores: stores.map((s) => {
-        return { name: s.store.name, id: s.store.id }
-      }),
-      tags: tags.map((t) => {
-        return { name: t.name, id: t.id }
-      }),
-      genres: genres.map((g) => {
-        return { name: g.name, id: g.id }
-      })
-    })
+        return res.json({
+          id,
+          name,
+          description,
+          released,
+          updated,
+          background_image,
+          background_image_additional,
+          website,
+          rating,
+          platforms: parent_platforms.map((p) => {
+            return { name: p.platform.name, id: p.platform.id }
+          }),
+          stores: stores.map((s) => {
+            return { name: s.store.name, id: s.store.id }
+          }),
+          tags: tags.map((t) => {
+            return { name: t.name, id: t.id }
+          }),
+          genres: genres.map((g) => {
+            return { name: g.name, id: g.id }
+          })
+        })
+      }
+    } else {
+      if (isUUID(idVideogame)) {
+        const temporal = await Videogame.findByPk(idVideogame)
+        if (temporal !== null) {
+          console.log(temporal)
+          return res.status(200).json(temporal)
+        } else {
+          return res
+            .status(200)
+            .json({ message: 'no se encontro el resultado' })
+        }
+      } else {
+        return res.status(400).json({ message: 'No es un id valido' })
+      }
+    }
   } catch (err) {
-    console.log(err)
+    return res.status(500).json({ message: err })
   }
 }
 

@@ -32,8 +32,17 @@ const Videogame = sequelize.define('Videogame', {
     allowNull: false
   }
 })
+
 ;(async () => {
-  await sequelize.sync({ force: true })
-  console.log('se creo de forma correcta')
+  sequelize
+    .sync()
+    .then(() => {
+      console.log(
+        'La conexión a la base de datos se ha establecido correctamente.'
+      )
+    })
+    .catch((err) => {
+      console.error('No se puede conectar a la base de datos:', err)
+    })
 })()
 export default Videogame
