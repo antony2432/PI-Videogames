@@ -43,7 +43,19 @@ const getVideoGame = async (req, res) => {
     const storeVideogames = await Videogame.findAll()
     return res.status(200).json([...storeVideogames, ...newresult])
   } catch (err) {
-    return res.status(500).json({ error: err })
+    console.log(err)
+    return res.status(500).json({message: 'Error interno'})
+  }
+}
+
+const prueba = async (req, res) => {
+  try {
+    const game = await Videogame.findByPk('59c3181b-12c8-4583-8976-a86b190c95a4')
+    const result = await game.getVideogames()
+    console.log(result)
+    res.end('hola')
+  } catch (err) {
+    console.log(err)
   }
 }
 
@@ -115,7 +127,8 @@ const getVideoGameById = async (req, res) => {
       }
     }
   } catch (err) {
-    return res.status(500).json({ message: err })
+    console.log(err)
+    return res.status(500).json({message: 'Error interno'})
   }
 }
 
@@ -144,6 +157,7 @@ const getVideogameByName = async (req, res) => {
     }
   } catch (err) {
     console.log(err)
+    return res.status(500).json({message: 'Error interno'})
   }
 }
 
@@ -153,20 +167,21 @@ const getGenres = async (req, res) => {
     const respu = []
     for (let i = 0; i < results.length; i++) {
       respu.push(results[i].name)
-      const [genre, created] = await Genre.findOrCreate({
+      await Genre.findOrCreate({
         where: { name: results[i].name },
         defaults: {
           id: results[i].id
         }
       })
-      console.log(genre, created)
     }
     const genres = await Genre.findAll()
-    res.json(genres)
+    res.status(200).json(genres)
   } catch (err) {
     console.log(err)
+    return res.status(500).json({message: 'Error interno'})
   }
 }
+
 
 const postVideoGame = async (req, res) => {
   try {
@@ -188,10 +203,11 @@ const postVideoGame = async (req, res) => {
       background_image
     })
     console.log(newGame)
-    // newGenres.map(async (g) => {
-    //   const genre = await Genre.findOne({ where: { name: g } })
-    //   genre.setVideogame(newGame)
-    // })
+    newGenres.map(async (g) => {
+      const genre = await Genre.findOne({ where: { name: [g] } })
+      genre.addVideogame(newGame)
+      console.log(genre)
+    })
 
     res.status(200).json({ message: 'se envio de forma Correcta' })
   } catch (err) {
@@ -202,10 +218,6 @@ const postVideoGame = async (req, res) => {
 const getPlataform = async (req, res) => {
   try {
     const { results } = await fetchVideoGame('platforms')
-    // const respu = []
-    // for (let i = 0; i < results.length; i++) {
-    //   respu.push( results[i].name)
-    // }
     res.json(results)
   } catch (err) {
     console.log(err)
@@ -222,10 +234,6 @@ const getTags = async (req, res) => {
 const getStores = async (req, res) => {
   try {
     const { results } = await fetchVideoGame('stores')
-    // const respu = []
-    // for (let i = 0; i < results.length; i++) {
-    //   respu.push( results[i].name)
-    // }
     res.json(results)
   } catch (err) {
     console.log(err)
@@ -239,5 +247,6 @@ export {
   postVideoGame,
   getPlataform,
   getTags,
-  getStores
+  getStores,
+  prueba
 }
