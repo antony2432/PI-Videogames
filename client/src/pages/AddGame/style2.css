@@ -1,0 +1,80 @@
+.form-container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #1a1a1a;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.form-label span {
+  display: inline-block;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.input-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.input-label {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.input-box {
+  display: none;
+}
+
+.checkbox-tag {
+  background-color: #2f2f2f;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.checkbox-tag:hover {
+  background-color: #3d3d3d;
+}
+
+.checkbox-tag:active {
+  background-color: #333;
+}
+
+.input-label .input-box:checked + .checkbox-tag {
+  background-color: #007bff;
+}
+
+.checkbox-text {
+  margin-left: 5px;
+}
+
+.form-input {
+  display: block;
+  width: 100%;
+  padding: 5px;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #007bff;
+}
+
+.form-error {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 5px;
+}

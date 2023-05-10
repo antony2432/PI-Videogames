@@ -1,0 +1,81 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #1f2029;
+}
+
+.login-title {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  background-color: #282a36;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s;
+}
+
+.login-label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.login-label-text {
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.login-input {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #44475a;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.login-error {
+  color: #ff5555;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.login-buttons-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.login-button {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.login-button:hover {
+  transform: scale(1.1);
+}
+
+.login-signup-button {
+  margin-right: 1rem;
+  background-color: #bd93f9;
+  color: #fff;
+}
+
+.login-login-button {
+  background-color: #50fa7b;
+  color: #fff;
+}

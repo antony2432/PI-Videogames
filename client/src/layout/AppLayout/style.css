@@ -1,0 +1,77 @@
+.container {
+  background: #1f2029;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  grid-template-areas:
+    'n1 n1 n1 n1 n1 n1'
+    'n2 n3 n3 n3 n3 n3'
+    'n2 n3 n3 n3 n3 n3'
+    'n2 n3 n3 n3 n3 n3'
+    'n2 n3 n3 n3 n3 n3'
+    'n2 n3 n3 n3 n3 n3'
+    'n2 n3 n3 n3 n3 n3'
+    'n2 n3 n3 n3 n3 n3'
+    'n2 n3 n3 n3 n3 n3'
+    'n2 n3 n3 n3 n3 n3'
+    'n2 n3 n3 n3 n3 n3'
+    'n2 n3 n3 n3 n3 n3'
+}
+.container2 {
+  background: #1f2029;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  grid-template-areas:
+    'n1 n1 n1 n1 n1 n1'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+}
+
+.container header {
+  grid-area: n1;
+}
+
+.container main {
+  justify-content: center;
+  margin: 30px;
+  grid-area: n3;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 250px));
+  gap: 40px;
+  overflow: auto;
+}
+
+.container main::-webkit-scrollbar{
+  display: none;
+}
+
+.container2 header {
+  grid-area: n1;
+}
+
+.container2 main {
+  margin: 30px;
+  grid-area: n2;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 16px;
+  overflow: auto;
+}
+
+.container2 main::-webkit-scrollbar{
+  display: none;
+}

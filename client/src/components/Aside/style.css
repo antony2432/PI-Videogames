@@ -1,0 +1,64 @@
+.aside {
+  grid-area: n2;
+  background-color: #282a36;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px;
+  /* height: calc(100vh - 90px); */
+  /* position: sticky; */
+  /* top: 90px; */
+}
+
+.aside-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.aside-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.aside-label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.aside-span {
+  font-size: 16px;
+}
+
+.aside-select {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  border: none;
+  outline: none;
+}
+
+.aside-select option {
+  background-color: #fff;
+  color: #333;
+}
+
+.aside button {
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.aside button:hover {
+  background-color: #1c2331;
+}
