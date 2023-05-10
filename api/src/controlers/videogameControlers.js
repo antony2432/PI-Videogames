@@ -5,18 +5,6 @@ import {
 import Genre from '../db/models/Genre.js'
 import Videogame from '../db/models/Videogame.js'
 
-export async function getAllVideogames(req, res, next) {
-  try {
-    const videogames = await Videogame.findAll()
-    console.log('--------------------------------')
-    console.log(videogames)
-    console.log('--------------------------------')
-    res.json(videogames)
-  } catch (error) {
-    next(error)
-  }
-}
-
 const getVideoGame = async (req, res) => {
   try {
     const { results } = await fetchVideoGame('games')
@@ -52,15 +40,20 @@ const getVideoGame = async (req, res) => {
       }
     })
     const storeVideogames = await Videogame.findAll()
-    res.json([...storeVideogames, ...newresult])
+    res.status(200).json([...storeVideogames, ...newresult])
   } catch (err) {
-    console.log(err)
+    res.status(500).json({ error: err })
   }
 }
 
 const getVideoGameById = async (req, res) => {
   try {
     const { idVideogame } = req.params
+    const temporal = Videogame.findByPk(idVideogame)
+    if (temporal !== null) {
+      console.log(temporal)
+      return res.status(200).json(temporal)
+    }
     const response = await fetchVideoGame(`games/${idVideogame}`)
     const {
       id,
@@ -97,7 +90,7 @@ const getVideoGameById = async (req, res) => {
       tags: tags.map((t) => {
         return { name: t.name, id: t.id }
       }),
-      genres:  genres.map((g) => {
+      genres: genres.map((g) => {
         return { name: g.name, id: g.id }
       })
     })
@@ -105,6 +98,7 @@ const getVideoGameById = async (req, res) => {
     console.log(err)
   }
 }
+
 const getVideogameByName = async (req, res) => {
   try {
     const { name } = req.query
@@ -156,7 +150,7 @@ const postVideoGame = async (req, res) => {
       releaseDate: released,
       rating,
       platforms,
-      image: background_image
+      background_image
     })
     console.log(newGame)
     // newGenres.map(async (g) => {

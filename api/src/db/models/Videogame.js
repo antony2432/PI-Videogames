@@ -27,7 +27,7 @@ const Videogame = sequelize.define('Videogame', {
     type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: false
   },
-  image: {
+  background_image: {
     type: DataTypes.STRING,
     allowNull: false
   }
