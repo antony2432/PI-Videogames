@@ -50,7 +50,6 @@ const getVideoGame = async (req, res) => {
 const getVideoGameById = async (req, res) => {
   try {
     const { idVideogame } = req.params
-    console.log(typeof idVideogame)
     if (idVideogame.length < 6) {
       console.log('llegue aqui')
       const response = await fetchVideoGame(`games/${idVideogame}`)
@@ -124,10 +123,25 @@ const getVideogameByName = async (req, res) => {
   try {
     const { name } = req.query
     const { results } = await fetchVideoGameByParams(name)
+    let temporalResult = []
+
     if (results.length > 15) {
-      return res.json(results.slice(0, 15))
+      temporalResult = [...temporalResult, ...results.slice(0, 15)]
+    } else {
+      temporalResult = [...temporalResult, ...results]
     }
-    res.json(results)
+    const storeGame = await Videogame.findAll({
+      where: {
+        name: [name]
+      },
+      limit: 15
+    })
+    if (storeGame.length === 0) {
+      return res.status(200).json(temporalResult)
+    } else {
+      temporalResult = [...temporalResult, ...storeGame]
+      return res.status(200).json(temporalResult)
+    }
   } catch (err) {
     console.log(err)
   }
