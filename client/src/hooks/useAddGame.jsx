@@ -5,11 +5,11 @@ export default function useAddGame() {
   const navigate = useNavigate()
   const initialValues = {
     name: '',
-    background_image: '',
+    background_image:'https://ceslava.s3-accelerate.amazonaws.com/2016/04/rZoltXj1-mistery-man-gravatar-wordpress-avatar-persona-misteriosa-510x510.png',
     description: '',
     released: '',
     platforms: [],
-    newGenres: [],
+    genres: [],
     rating: 1
   }
   const initialErrorValues = {
@@ -18,7 +18,7 @@ export default function useAddGame() {
     description: '',
     released: '',
     platforms: '',
-    newGenres: '',
+    genres: '',
     rating: ''
   }
 
@@ -101,25 +101,32 @@ export default function useAddGame() {
   }
 
   const handleChangeRadius = (e, rf) => {
-    const { value, checked } = e.target
+    const { value, checked, id } = e.target
+    console.log(e.target.id)
     switch (rf) {
-      case 'newGenres':
+      case 'genres':
         if (checked) {
-          setAddGame({ ...addGame, newGenres: [...addGame.newGenres, value] })
+          setAddGame({
+            ...addGame,
+            genres: [...addGame.genres, { name: value, id }]
+          })
         } else {
           setAddGame({
             ...addGame,
-            newGenres: addGame.newGenres.filter(a => a !== value)
+            genres: addGame.genres.filter(a => a.name !== value)
           })
         }
         break
       case 'platforms':
         if (checked) {
-          setAddGame({ ...addGame, platforms: [...addGame.platforms, value] })
+          setAddGame({
+            ...addGame,
+            platforms: [...addGame.platforms, { name: value, id }]
+          })
         } else {
           setAddGame({
             ...addGame,
-            platforms: addGame.platforms.filter(a => a !== value)
+            platforms: addGame.platforms.filter(a => a.name !== value)
           })
         }
         break
@@ -153,8 +160,7 @@ export default function useAddGame() {
     if (hasChanges) {
       setError(prevState => ({
         ...prevState,
-        newGenres:
-          addGame.newGenres.length === 0 ? 'Este campo es obligatorio' : '',
+        genres: addGame.genres.length === 0 ? 'Este campo es obligatorio' : '',
         platforms:
           addGame.platforms.length === 0 ? 'Este campo es obligatorio' : ''
       }))

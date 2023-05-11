@@ -34,9 +34,9 @@ export default function Aside() {
                 className='aside-select'
               >
                 <option value='all'>All</option>
-                {genders.map((g, i) => (
-                  <option value={g} key={i}>
-                    {g}
+                {genders.map(({ name, id }) => (
+                  <option value={name} key={id}>
+                    {name}
                   </option>
                 ))}
               </select>
@@ -49,9 +49,9 @@ export default function Aside() {
                 className='aside-select'
               >
                 <option value='all'>All</option>
-                {plataform.map((p, i) => (
-                  <option value={p} key={i}>
-                    {p}
+                {plataform.map(({ name, id }) => (
+                  <option value={name} key={id}>
+                    {name}
                   </option>
                 ))}
               </select>

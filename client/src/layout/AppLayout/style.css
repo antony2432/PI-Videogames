@@ -17,7 +17,7 @@
     'n2 n3 n3 n3 n3 n3'
     'n2 n3 n3 n3 n3 n3'
     'n2 n3 n3 n3 n3 n3'
-    'n2 n3 n3 n3 n3 n3'
+    'n2 n3 n3 n3 n3 n3';
 }
 .container2 {
   background: #1f2029;
@@ -38,7 +38,7 @@
     'n2 n2 n2 n2 n2 n2'
     'n2 n2 n2 n2 n2 n2'
     'n2 n2 n2 n2 n2 n2'
-    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2';
 }
 
 .container header {
@@ -47,6 +47,7 @@
 
 .container main {
   justify-content: center;
+  align-items: center;
   margin: 30px;
   grid-area: n3;
   display: grid;
@@ -55,7 +56,7 @@
   overflow: auto;
 }
 
-.container main::-webkit-scrollbar{
+.container main::-webkit-scrollbar {
   display: none;
 }
 
@@ -72,6 +73,41 @@
   overflow: auto;
 }
 
-.container2 main::-webkit-scrollbar{
+.container2 main::-webkit-scrollbar {
+  display: none;
+}
+
+.container3 {
+  background: #1f2029;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  grid-template-areas:
+    'n1 n1 n1 n1 n1 n1'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2'
+    'n2 n2 n2 n2 n2 n2';
+}
+
+.container3 header {
+  grid-area: n1;
+}
+
+.container3 main {
+  width: 100%;
+  grid-area: n2;
+}
+
+.container3 main::-webkit-scrollbar {
   display: none;
 }

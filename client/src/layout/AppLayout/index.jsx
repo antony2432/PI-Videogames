@@ -10,8 +10,10 @@ export default function AppLayout({ children }) {
   return (
     <div
       className={
-        verificator === '/app/videogame/' || verificator === '/app/addgame'
+        verificator === '/app/videogame/'
           ? 'container2'
+          : verificator === '/app/addgame'
+          ? 'container3'
           : 'container'
       }
     >

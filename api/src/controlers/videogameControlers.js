@@ -36,7 +36,7 @@ const getVideoGame = async (req, res) => {
         return { name: t.name, id: t.id }
       })
       const storesResult = stores.map((s) => {
-        return { name: s.name, id: s.id }
+        return { name: s.store.name, id: s.store.id }
       })
 
       return {
@@ -169,7 +169,6 @@ const getVideogameByName = async (req, res) => {
   }
 }
 
-
 const getGenres = async (req, res) => {
   try {
     const genres = await Genre.findAll()
@@ -188,11 +187,14 @@ const postVideoGame = async (req, res) => {
       description,
       released,
       platforms,
-      newGenres,
+      genres,
       rating
     } = req.body
 
-    // Create the new video game
+    if(name === null || background_image === null || description === null || released === null ||platforms === null|| genres === null || rating === null) { 
+      return res.status(400).json({message: 'null data'})
+    }
+
     const newGame = await Videogame.create({
       name,
       description,
@@ -202,11 +204,10 @@ const postVideoGame = async (req, res) => {
       background_image
     })
 
-    // Find all genres that match the names in newGenres
-    const genres = await Genre.findAll({ where: { name: newGenres } })
-
-    // Associate the new video game with the found genres
-    await newGame.addGenres(genres)
+    for (let i = 0; i < genres.length; i++) {
+      const result = await Genre.findAll({ where: { name: genres[i].name } })
+      await newGame.addGenres(result)
+    }
 
     res.status(200).json({ message: 'Video game created successfully' })
   } catch (err) {
@@ -215,11 +216,15 @@ const postVideoGame = async (req, res) => {
   }
 }
 
-
 const getPlataform = async (req, res) => {
   try {
     const { results } = await fetchVideoGame('platforms')
-    res.json(results)
+    const newResults = []
+    results.forEach((r) => {
+      const { id, name } = r
+      newResults.push({ id, name })
+    })
+    res.json(newResults)
   } catch (err) {
     console.log(err)
   }
@@ -235,7 +240,12 @@ const getTags = async (req, res) => {
 const getStores = async (req, res) => {
   try {
     const { results } = await fetchVideoGame('stores')
-    res.json(results)
+    const newStore = []
+    results.forEach((s) => {
+      const {id, name} = s
+      newStore.push({id, name})
+    })
+    res.json(newStore)
   } catch (err) {
     console.log(err)
   }

@@ -2,16 +2,17 @@ import { useLocation, Outlet } from 'react-router-dom'
 import AppLayout from '../../layout/AppLayout'
 import Card from '../../components/Card'
 import useVideoGames from '../../hooks/useVideoGames'
+import './style.css'
 
 export default function Home() {
-  const { loading, display, search } = useVideoGames()
+  const { loading, search, display } = useVideoGames()
   const { pathname } = useLocation()
-  console.log(search.length)
   return (
     <AppLayout>
       {pathname === '/app' ? (
         loading && loading ? (
-          <h1>Loading...</h1>
+          <div className="spinner"></div>
+          // <h1>Loading...</h1>
         ) : search.length === 0 ? (
           <>{display && display.map(g => <Card game={g} key={g.id} />)}</>
         ) : (
