@@ -22,9 +22,9 @@ export default function VideoGame() {
     website,
     rating,
     platforms,
-    newStores,
-    newTags,
-    newGenres
+    stores,
+    tags,
+    genres
   } = videGame
 
   return (
@@ -54,19 +54,19 @@ export default function VideoGame() {
           <div>
             <h3 className='videogame-details-heading'>Stores:</h3>
             <ul className='videogame-details-list'>
-              {newStores && newStores.map(s => <li key={s.id}><span>{s.name}</span></li>)}
+              {stores && stores.map(s => <li key={s.id}><span>{s.name}</span></li>)}
             </ul>
           </div>
           <div>
             <h3 className='videogame-details-heading'>Tags:</h3>
             <ul className='videogame-details-list'>
-              {newTags && newTags.map(t => <li key={t.id}><span>{t.name}</span></li>)}
+              {tags && tags.map(t => <li key={t.id}><span>{t.name}</span></li>)}
             </ul>
           </div>
           <div>
             <h3 className='videogame-details-heading'>Genres:</h3>
             <ul className='videogame-details-list'>
-              {newGenres && newGenres.map(g => <li key={g.id}><span>{g.name}</span></li>)}
+              {genres && genres.map(g => <li key={g.id}><span>{g.name}</span></li>)}
             </ul>
           </div>
         </div>

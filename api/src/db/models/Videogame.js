@@ -1,5 +1,7 @@
 import { DataTypes } from 'sequelize'
 import sequelize from '../conection.js'
+import Genre from './Genre.js'
+import { fetchVideoGame } from '../../services/fetchRawg.js'
 
 const Videogame = sequelize.define('Videogame', {
   id: {
@@ -44,5 +46,19 @@ const Videogame = sequelize.define('Videogame', {
     .catch((err) => {
       console.error('No se puede conectar a la base de datos:', err)
     })
+    .finally(async () => {
+      const { results } = await fetchVideoGame('genres')
+      const respu = []
+      for (let i = 0; i < results.length; i++) {
+        respu.push(results[i].name)
+        await Genre.findOrCreate({
+          where: { name: results[i].name },
+          defaults: {
+            id: results[i].id
+          }
+        })
+      }
+    })
 })()
+
 export default Videogame

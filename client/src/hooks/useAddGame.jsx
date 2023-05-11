@@ -21,11 +21,13 @@ export default function useAddGame() {
     newGenres: '',
     rating: ''
   }
+
   function esFechaMayorQueHoy(fecha) {
     const hoy = new Date()
     const fechaIngresada = new Date(fecha)
     return fechaIngresada > hoy
   }
+
   const [addGame, setAddGame] = useState(initialValues)
   const [error, setError] = useState(initialErrorValues)
   const [hasChanges, setHasChanges] = useState(false)
@@ -75,11 +77,11 @@ export default function useAddGame() {
           ...prevState,
           [indexKeys[i]]: 'Este campo es obligatorio'
         }))
-        return console.log(error)
+        return window.alert(`Tienes un error en: ${indexKeys[i]}`)
       }
     }
     for (let i = 0; i < indexKeys.length; i++) {
-      if(error[indexKeys[i]].length !== 0){
+      if (error[indexKeys[i]].length !== 0) {
         return window.alert('Tienes un error')
       }
     }
@@ -90,12 +92,12 @@ export default function useAddGame() {
       method: 'POST',
       body: JSON.stringify(addGame)
     })
-    .then(data => data.json())
-    .then(({message})=> {
-      if(message === 'se envio de forma Correcta'){
-        navigate('/app')
-      }
-    })
+      .then(data => data.json())
+      .then(({ message }) => {
+        if (message === 'Video game created successfully') {
+          navigate('/app')
+        }
+      })
   }
 
   const handleChangeRadius = (e, rf) => {

@@ -8,7 +8,6 @@ import {
   getPlataform,
   getTags,
   getStores,
-  prueba
 } from '../controlers/videogameControlers.js'
 const router = Router()
 
@@ -24,5 +23,4 @@ router.get('/genres', getGenres)
 router.get('/plataform', getPlataform)
 router.get('/tags', getTags)
 router.get('/stores', getStores)
-router.get('/prueba', prueba)
 export default router

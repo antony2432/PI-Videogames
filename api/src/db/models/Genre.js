@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize'
 import sequelize from '../conection.js'
-import Videogame from './Videogame.js'
 
 const Genre = sequelize.define('Genre', {
   id: {
@@ -15,8 +14,5 @@ const Genre = sequelize.define('Genre', {
   }
 })
 
-Genre.belongsToMany(Videogame, {
-  through: 'VideogameGenre'
-})
 
 export default Genre

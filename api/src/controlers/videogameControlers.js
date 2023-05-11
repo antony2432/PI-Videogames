@@ -6,10 +6,15 @@ import Genre from '../db/models/Genre.js'
 import { isUUID } from '../utils/validacion.js'
 import Videogame from '../db/models/Videogame.js'
 
+//utils
+import { genresByIdVideogame } from '../utils/utils.js'
+
 const getVideoGame = async (req, res) => {
   try {
     const { results } = await fetchVideoGame('games')
-    const newresult = results.map((g) => {
+    const videogames = await Videogame.findAll()
+
+    const newResult = results.map((g) => {
       const {
         id,
         name,
@@ -21,41 +26,60 @@ const getVideoGame = async (req, res) => {
         tags
       } = g
 
+      const platformsResult = platforms.map((p) => {
+        return { name: p.platform.name, id: p.platform.id }
+      })
+      const genresResult = genres.map((g) => {
+        return { name: g.name, id: g.id }
+      })
+      const tagsResult = tags.map((t) => {
+        return { name: t.name, id: t.id }
+      })
+      const storesResult = stores.map((s) => {
+        return { name: s.name, id: s.id }
+      })
+
       return {
         id,
         name,
         background_image,
         rating,
-        platforms: platforms.map((p) => {
-          return { name: p.platform.name, id: p.platform.id }
-        }),
-        genres: genres.map((g) => {
-          return { name: g.name, id: g.id }
-        }),
-        tags: tags.map((t) => {
-          return { name: t.name, id: t.id }
-        }),
-        stores: stores.map((s) => {
-          return { name: s.store.name, id: s.store.id }
-        })
+        platforms: platformsResult,
+        genres: genresResult,
+        tags: tagsResult,
+        stores: storesResult
       }
     })
-    const storeVideogames = await Videogame.findAll()
-    return res.status(200).json([...storeVideogames, ...newresult])
-  } catch (err) {
-    console.log(err)
-    return res.status(500).json({message: 'Error interno'})
-  }
-}
 
-const prueba = async (req, res) => {
-  try {
-    const game = await Videogame.findByPk('59c3181b-12c8-4583-8976-a86b190c95a4')
-    const result = await game.getVideogames()
-    console.log(result)
-    res.end('hola')
+    const newStoreVideoGames = await Promise.all(
+      videogames.map(async (vg) => {
+        const {
+          id,
+          name,
+          description,
+          releaseDate,
+          rating,
+          platforms,
+          background_image
+        } = vg
+        const temporalGenres = await genresByIdVideogame(id)
+        return {
+          id,
+          name,
+          description,
+          releaseDate,
+          rating,
+          platforms,
+          background_image,
+          genres: temporalGenres
+        }
+      })
+    )
+
+    return res.status(200).json([...newStoreVideoGames, ...newResult])
   } catch (err) {
     console.log(err)
+    return res.status(500).json({ message: 'Error interno' })
   }
 }
 
@@ -63,72 +87,58 @@ const getVideoGameById = async (req, res) => {
   try {
     const { idVideogame } = req.params
     if (idVideogame.length < 6) {
-      console.log('llegue aqui')
       const response = await fetchVideoGame(`games/${idVideogame}`)
       const { detail } = response
       if (detail) {
         return res
           .status(200)
           .json({ message: 'no se encontro el resultado en rawGames' })
-      } else {
-        const {
-          id,
-          name,
-          description,
-          released,
-          updated,
-          background_image,
-          background_image_additional,
-          website,
-          rating,
-          parent_platforms,
-          stores,
-          tags,
-          genres
-        } = response
-
-        return res.json({
-          id,
-          name,
-          description,
-          released,
-          updated,
-          background_image,
-          background_image_additional,
-          website,
-          rating,
-          platforms: parent_platforms.map((p) => {
-            return { name: p.platform.name, id: p.platform.id }
-          }),
-          stores: stores.map((s) => {
-            return { name: s.store.name, id: s.store.id }
-          }),
-          tags: tags.map((t) => {
-            return { name: t.name, id: t.id }
-          }),
-          genres: genres.map((g) => {
-            return { name: g.name, id: g.id }
-          })
-        })
       }
-    } else {
-      if (isUUID(idVideogame)) {
-        const temporal = await Videogame.findByPk(idVideogame)
-        if (temporal !== null) {
-          console.log(temporal)
-          return res.status(200).json(temporal)
-        } else {
-          return res
-            .status(200)
-            .json({ message: 'no se encontro el resultado' })
-        }
-      } else {
-        return res.status(400).json({ message: 'No es un id valido' })
-      }
+      const {
+        id,
+        name,
+        description,
+        released,
+        updated,
+        background_image,
+        background_image_additional,
+        website,
+        rating,
+        parent_platforms,
+        stores,
+        tags,
+        genres
+      } = response
+      return res.json({
+        id,
+        name,
+        description,
+        released,
+        updated,
+        background_image,
+        background_image_additional,
+        website,
+        rating,
+        platforms: parent_platforms.map((p) => ({
+          name: p.platform.name,
+          id: p.platform.id
+        })),
+        stores: stores.map((s) => ({ name: s.store.name, id: s.store.id })),
+        tags: tags.map((t) => ({ name: t.name, id: t.id })),
+        genres: genres.map((g) => ({ name: g.name, id: g.id }))
+      })
     }
+    if (isUUID(idVideogame)) {
+      const temporal = await Videogame.findByPk(idVideogame)
+      if (temporal !== null) {
+        return res.status(200).json(temporal)
+      }
+      return res.status(200).json({ message: 'no se encontro el resultado' })
+    }
+    return res.status(400).json({ message: 'No es un id valido' })
   } catch (err) {
     console.log(err)
-    return res.status(500).json({message: 'Error interno'})
+    return res.status(500).json({ message: 'Error interno' })
   }
 }
 
@@ -136,52 +146,39 @@ const getVideogameByName = async (req, res) => {
   try {
     const { name } = req.query
     const { results } = await fetchVideoGameByParams(name)
-    let temporalResult = []
 
-    if (results.length > 15) {
-      temporalResult = [...temporalResult, ...results.slice(0, 15)]
-    } else {
-      temporalResult = [...temporalResult, ...results]
-    }
+    let temporalResult = results.slice(0, 15)
+    console.log(name)
     const storeGame = await Videogame.findAll({
       where: {
         name: [name]
       },
       limit: 15
     })
-    if (storeGame.length === 0) {
-      return res.status(200).json(temporalResult)
-    } else {
+
+    if (storeGame.length > 0) {
+      const index = 15 - storeGame.length
+      temporalResult = temporalResult.slice(0, index)
       temporalResult = [...temporalResult, ...storeGame]
-      return res.status(200).json(temporalResult)
     }
+
+    return res.status(200).json(temporalResult)
   } catch (err) {
     console.log(err)
-    return res.status(500).json({message: 'Error interno'})
+    return res.status(500).json({ message: 'Error interno' })
   }
 }
 
+
 const getGenres = async (req, res) => {
   try {
-    const { results } = await fetchVideoGame('genres')
-    const respu = []
-    for (let i = 0; i < results.length; i++) {
-      respu.push(results[i].name)
-      await Genre.findOrCreate({
-        where: { name: results[i].name },
-        defaults: {
-          id: results[i].id
-        }
-      })
-    }
     const genres = await Genre.findAll()
     res.status(200).json(genres)
   } catch (err) {
     console.log(err)
-    return res.status(500).json({message: 'Error interno'})
+    return res.status(500).json({ message: 'Error interno' })
   }
 }
-
 
 const postVideoGame = async (req, res) => {
   try {
@@ -194,6 +191,8 @@ const postVideoGame = async (req, res) => {
       newGenres,
       rating
     } = req.body
+
+    // Create the new video game
     const newGame = await Videogame.create({
       name,
       description,
@@ -202,18 +201,20 @@ const postVideoGame = async (req, res) => {
       platforms,
       background_image
     })
-    console.log(newGame)
-    newGenres.map(async (g) => {
-      const genre = await Genre.findOne({ where: { name: [g] } })
-      genre.addVideogame(newGame)
-      console.log(genre)
-    })
 
-    res.status(200).json({ message: 'se envio de forma Correcta' })
+    // Find all genres that match the names in newGenres
+    const genres = await Genre.findAll({ where: { name: newGenres } })
+
+    // Associate the new video game with the found genres
+    await newGame.addGenres(genres)
+
+    res.status(200).json({ message: 'Video game created successfully' })
   } catch (err) {
     console.log(err)
+    res.status(500).json({ message: 'Internal server error' })
   }
 }
+
 
 const getPlataform = async (req, res) => {
   try {
@@ -239,6 +240,7 @@ const getStores = async (req, res) => {
     console.log(err)
   }
 }
+
 export {
   getVideoGame,
   getVideoGameById,
@@ -247,6 +249,5 @@ export {
   postVideoGame,
   getPlataform,
   getTags,
-  getStores,
-  prueba
+  getStores
 }
