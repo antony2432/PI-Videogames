@@ -10,7 +10,7 @@ export default function useAddGame() {
     released: '',
     platforms: [],
     newGenres: [],
-    rating: 0
+    rating: 1
   }
   const initialErrorValues = {
     name: '',

@@ -4,12 +4,14 @@ import {
   filterGames,
   setVideoGames,
   setFilters,
-  displayGames
+  displayGames,
+  searchVideoGames
 } from '../redux/slices/videoGamesSlice'
 
 export default function useVideoGames() {
   const dispatch = useDispatch()
   const display = useSelector(displayGames)
+  const search = useSelector(searchVideoGames)
 
   const [loading, setLoading] = useState(false)
 
@@ -33,7 +35,6 @@ export default function useVideoGames() {
       })
   }, [])
 
-
   const changeFilter = (name, value) => {
     dispatch(setFilters({ name, value }))
   }
@@ -41,6 +42,7 @@ export default function useVideoGames() {
   return {
     loading,
     display,
-    changeFilter
+    changeFilter,
+    search
   }
 }

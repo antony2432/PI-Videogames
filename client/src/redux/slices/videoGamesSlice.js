@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   allVideoGames: [],
   displayGames: [],
-  filters: { genders: 'all', platform: 'all', tags: 'all', stores: 'all' }
+  filters: { genders: 'all', platform: 'all', tags: 'all', stores: 'all' },
+  searchVideoGames: []
 }
 
 const videoGamesSlice = createSlice({
@@ -181,18 +182,22 @@ const videoGamesSlice = createSlice({
         temporalDisplay.push(state.allVideoGames[i])
       }
       state.displayGames = temporalDisplay
+    },
+    setSearchVideogame: (state, actions) => {
+      state.searchVideoGames = []
+      const asd = actions.payload
+      state.searchVideoGames = [...state.searchVideoGames, ...asd]
+    },
+    removeSearch: state => {
+      state.searchVideoGames = []
     }
   }
 })
 
+export const searchVideoGames = state => state.videogames.searchVideoGames
 export const filterProps = state => state.videogames.filters
 export const displayGames = state => state.videogames.displayGames
 export const allVideoGames = state => state.videogames.allVideoGames
-export const { setVideoGames, filterGames, setFilters } =
+export const { setVideoGames, filterGames, setFilters, setSearchVideogame, removeSearch } =
   videoGamesSlice.actions
 export default videoGamesSlice.reducer
-
-// vamos a crear un display para mostrar las cards filtradas
-// se tiene que crear un estado que sera el display
-// el cual actuara dependiendo de los filtros
-// si todos los filtros estan en all => se mostrara allVideoGames

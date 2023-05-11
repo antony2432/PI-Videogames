@@ -1,0 +1,31 @@
+.searchBar {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.searchBar .searchBar-inputs-button {
+  display: flex;
+}
+
+.searchBar .searchabar-button {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.searchBar .sd {
+  font-size: 20px;
+}
+
+.searchabar-button:hover {
+  background-color: #1c2331;
+}
